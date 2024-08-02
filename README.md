@@ -1,1 +1,1 @@
-# Scripts For accomplishing varies tasks
+# Scripts For varies tasks
