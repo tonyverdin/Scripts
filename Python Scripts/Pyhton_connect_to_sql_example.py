@@ -14,7 +14,7 @@ conn_str = (
     'TrustServerCertificate=yes;'
     'Encrypt=yes;'
 )
-table_name = 'ReportTreeNodes'
+
 query = f"""
 SELECT * FROM ReportTreeNodes
 """
