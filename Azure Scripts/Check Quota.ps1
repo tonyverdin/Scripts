@@ -1,20 +1,21 @@
 # Prompt the user for the resource name
-$ResourceName = Read-Host "Enter the resource name (e.g., NCADSA10v4)"
-
-# Check if the resource name is empty
-if ([string]::IsNullOrWhiteSpace($ResourceName)) {
-    Write-Host "Resource name cannot be empty. Exiting."
-    exit
-}
+$ResourceName = Read-Host "Enter the resource search term (default, returns all values)"
 
 # Prompt the user for the location
-$Location = Read-Host "Enter the location (e.g., eastus)"
+$Location = Read-Host "Enter the location (default, eastus)"
 
 # Check if the location is empty
 if ([string]::IsNullOrWhiteSpace($Location)) {
-    Write-Host "Location cannot be empty. Exiting."
-    exit
+
+    $Location = "eastus"
 }
 
 # Execute the Azure CLI command with the provided parameters
-az vm list-usage --location $Location --query "[?contains(name.value, '$ResourceName')].{Name:name.value, CurrentValue:currentValue, Limit:limit}" --output table
+if([string]::IsNullOrWhiteSpace($ResourceName))
+{
+    az vm list-usage --location $Location --output table
+}
+else
+{
+    az vm list-usage --location $Location --query "[?contains(name.value, '$ResourceName')].{Name:name.value, CurrentValue:currentValue, Limit:limit}" --output table
+}
