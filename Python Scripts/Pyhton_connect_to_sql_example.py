@@ -1,7 +1,8 @@
 from dotenv import load_dotenv
 import os
-import pyodbc
-
+import pandas as pd
+import sqlalchemy as db
+import urllib
 load_dotenv()
 
 # Create the connection string
@@ -18,16 +19,16 @@ conn_str = (
 query = f"""
 SELECT * FROM ReportTreeNodes
 """
-
+# Convert to sql alchemy for nice print out
+connection_uri = f"mssql+pyodbc:///?odbc_connect={urllib.parse.quote_plus(conn_str)}"
 
 
 # Establish the connection
-try:
-    conn = pyodbc.connect(conn_str)
-    print("Connection successful!")
-    cursor = conn.cursor()
-    cursor.execute(query)
-    fks = cursor.fetchall()
-    print(fks)
-except Exception as e:
-    print(f"Error: {e}")
+engine = db.create_engine(connection_uri)
+
+# Sample query
+query = 'SELECT * FROM  ReportTreeNodes'
+
+# Read in the data frame and print out to console
+df = pd.read_sql(query, engine)
+print(df)
